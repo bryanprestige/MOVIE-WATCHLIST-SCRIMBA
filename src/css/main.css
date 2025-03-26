@@ -72,7 +72,7 @@ a{
     border-radius: 0px 3px 3px 0px;
 }   
 
-#empty-search{
+.empty-search{
     width: 100%;
     margin: auto;
     margin-top: 200px;
@@ -84,6 +84,9 @@ a{
     color: #dfdddd;
 }
 
+.hidden{
+    display: none;
+}
 /*=======MOVIE-CARD-COMPONENT=========*/
 
 .movie-card{
@@ -92,6 +95,7 @@ a{
     flex-direction: row;
     margin: auto;
     margin-top: 20px;
+    border-bottom: solid 1px #dfdddd;
 }
 
 .movie-card-image{
@@ -141,10 +145,40 @@ a{
     font-size: 12px;
     padding: unset;
     margin-top: -3px;
+    transition: all .2s ease-in;
+}
+
+.movie-card-button:hover{
+    transform: scale(1.1);
 }
 
 .movie-card-description{
     font-size: 10px;
     font-weight: 100;
     text-shadow: unset;
+}
+
+/*=======WATCHLIST=========*/
+
+.explore-watchlist{
+    font-size: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: #3f3b3b;
+    font-weight: 100;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.explore-link{
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    padding: unset;
+    margin-top: -3px;
+    transition: all .2s ease-in;
+    color: black;
+}
+
+.explore-link:hover{
+    transform: scale(1.1);
 }

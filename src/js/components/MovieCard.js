@@ -61,10 +61,10 @@ export class MovieCard extends LitElement {
 
        _onWatchlistClick() {
 
-          this.movie.watchlist = !this.movie.watchlist;
           let movie = this.movie    
           movieStorage.push(movie)
           localStorage.setItem('movieList', JSON.stringify(movieStorage));
+          alert('Movie added to watchlist');
       }
 }
 customElements.define('movie-card', MovieCard );

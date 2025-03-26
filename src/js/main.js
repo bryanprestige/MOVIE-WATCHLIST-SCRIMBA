@@ -2,25 +2,37 @@ import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
 
 export const PORT = location.port ? `:${location.port}` : ''
+const apiToken = process.env.API_TOKEN;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const searchButton = document.getElementById('search-button')
+  if (window.location.pathname.includes('index.html')) {
+    const searchButton = document.getElementById('search-button')
   searchButton.addEventListener('click', searchMovies)
+  } else if (window.location.pathname.includes('watchlist.html')) {
+    
+  }
+  
 })
-
-
-
 
 async function searchMovies() {
     const searchValue = document.getElementById('search-input').value
-    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=9b9e0974&s=${searchValue}`)
+    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=${apiToken}&s=${searchValue}`)
     console.log(apiData)  
 
     const searchResults = apiData.Search
     console.log(searchResults,'searchresults')
 
-    if (Array.isArray(searchResults)) {
+    if (searchResults.length === 0) {
+      cleanEmptySearchContainer()
+      cleanMovieCardContainer()
+      const movieCardContainer = document.querySelector('.empty-search');
+      const emptySearchContainer = document.createElement('div');
+      emptySearchContainer.classList.add('empty-search');
+      emptySearchContainer.innerHTML = `<p>No results found for ${searchValue}</p>`;
+      movieCardContainer.appendChild(emptySearchContainer);
+      return
+    } else if (Array.isArray(searchResults)) {
       searchResults.forEach(movie => {
         const imddbID = movie.imdbID
         getEachMovie(imddbID)
@@ -28,12 +40,11 @@ async function searchMovies() {
     } else {
       createMovieCard(apiData)
     }    
+    cleanEmptySearchContainer()
 } 
 
-
 async function getEachMovie(imdbID) {
-
-    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=9b9e0974&i=${imdbID}`)
+    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=${apiToken}&i=${imdbID}`)
     console.log(apiData)  
 
     createMovieCard(apiData)
@@ -43,10 +54,15 @@ function createMovieCard(apiData) {
     const movieCardContainer = document.querySelector('#movie-card-container');
     const movieCard = document.createElement('movie-card')
 
-    if(apiData.Poster === 'N/A' || apiData.Plot === 'N/A' || apiData.ImdbRating === 'N/A') {
+    if(
+      apiData.Poster === 'N/A' ||
+      apiData.Plot === 'N/A' || 
+      apiData.ImdbRating === 'N/A'||
+      apiData.Runtime === 'N/A') {
         apiData.Poster = 'https://placehold.co/90x120'
         apiData.Plot = 'No plot available'
         apiData.ImdbRating = 'No rating available'
+        apiData.Runtime = 'No runtime available'
     }
     movieCard.setAttribute('movie', apiData)
     movieCard.setAttribute('title', apiData.Title)
@@ -58,6 +74,22 @@ function createMovieCard(apiData) {
     movieCard.setAttribute('imdbId', apiData.imdbID) 
     movieCardContainer.appendChild(movieCard)
 }
+
+function cleanEmptySearchContainer () {
+    const movieCardContainer = document.querySelector('.empty-search');
+    movieCardContainer.classList.add('hidden');
+}
+
+function cleanMovieCardContainer () {
+    const movieCardContainer = document.querySelector('#movie-card-container');
+    movieCardContainer.classList.add('hidden');
+}
+
+/*=========My Watchist=========*/ 
+
+
+
+/* =========APIDATA=========*/ 
 
 export async function getAPIData(apiURL, method = 'GET' , data) {
     let apiData
@@ -72,7 +104,6 @@ export async function getAPIData(apiURL, method = 'GET' , data) {
         }
 
         apiData = await simpleFetch(apiURL, {
-          // Si la petición tarda demasiado, la abortamos
           signal: AbortSignal.timeout(3000),
           method: method,
           body: data ?? undefined,
@@ -80,14 +111,11 @@ export async function getAPIData(apiURL, method = 'GET' , data) {
         });
       } catch (/** @type {any | HttpError} */err) {
       if (err.name === 'AbortError') {
-        //console.error('Fetch abortado');
       }
       if (err instanceof HttpError) {
         if (err.response.status === 404) {
-          //console.error('Not found');
         }
         if (err.response.status === 500) {
-          //console.error('Internal server error');
         }
       }
     }
