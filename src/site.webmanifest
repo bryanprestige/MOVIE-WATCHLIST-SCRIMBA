@@ -1,5 +1,5 @@
-{   "name":"Prestige scheme generator",
-    "short_name":"PcolorSheme",
+{   "name":"Movie Watchlist Prestige",
+    "short_name":"Prestige Watchlist",
     "icons":[
         {"src":"/android-chrome-192x192.png",
         "sizes":"192x192",
@@ -9,5 +9,5 @@
         "type":"image/png"}
         ],
     "theme_color":"#ffffff",
-    "background_color":"#ffffff",
+    "background_color":"#243D4B",
     "display":"standalone"}
