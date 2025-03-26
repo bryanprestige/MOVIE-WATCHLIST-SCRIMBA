@@ -1,0 +1,24 @@
+{
+  "name": "movie-watchlist-prestige",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "movie wtachlist app",
+  "main": "main.js",
+  "scripts": {
+    "server:express:start": "node --env-file=.env --watch server/server.express.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryanprestige/NEOLAND-BOOTCAMP-BRYAN-.git"
+  },
+  "author": "@Bryanprestige",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryanprestige/MOVIE-WATCHLIST-SCRIMBA"
+  },
+  "homepage": "https://github.com/bryanprestige/MOVIE-WATCHLIST-SCRIMBA#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2"
+  }
+}

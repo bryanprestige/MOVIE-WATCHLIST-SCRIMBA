@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestige Color Scheme Generator Scrimba</title>
-    <link rel="manifest" href="/site.webmanifest">
+    <title>Movie Watchlist Scrimba</title>
+    <!-- <link rel="manifest" href="/site.webmanifest"> -->
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/main.css">
+    <script type="module" src="./js/components/MovieCard.js"></script>
     <script type="module" src="./js/main.js"></script>
 </head>
 <body>
-
+    <nav>
+        <ul>
+            <li>
+                <a href="#">
+                    <h1 class="home">Find Your Movie</h1>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <h1 class="second-home"> My Watchlist</h1>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main>
+        <section id="search-container">
+            <input id="search-input" type="text" placeholder="&#128269; Search for a movie" ></input>
+            <button id="search-button">Search</button>
+        </section>
+        <!-- <section id="empty-search">
+            <img src="./assets/empty-search-Icon.png" alt="">
+            <h1 class="explore">Start exploring</h1>
+        </section> -->
+        <section id="movie-card-container">
+            <movie-card></movie-card>
+        </section>
+    </main>
 </body>
 </html  
-s
