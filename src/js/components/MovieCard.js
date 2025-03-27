@@ -14,7 +14,6 @@ export class MovieCard extends LitElement {
     static styles = [ css,reset];
 
     static properties = { 
-        movie : { type: Object },
         title: { type: String },
         rate: { type: String },
         time: { type: String },
@@ -33,14 +32,17 @@ export class MovieCard extends LitElement {
         super.connectedCallback();
         let movieId = this.imdbId
         let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
-        if (movieFavList.some(favMovie => favMovie.imdbId === movieId)) {
+        if (movieFavList.some(favMovie => favMovie === movieId)) {
             this.favorited = true
         }
-        
-    }   
-      render() {
-        return html`
-        <div class="movie-card">
+      }   
+    
+      displayMovieCardConditions() {
+        const currentPage = window.location.pathname;
+
+        return currentPage.includes('watchlist.html') ? 
+            html`
+             <div class="movie-card">
           <img class="movie-card-image" src="${this.poster}" alt="${this.title} poster">
           <div class="movie-card-info">
             <div class="movie-card-title-rate">
@@ -50,21 +52,63 @@ export class MovieCard extends LitElement {
             <div class="movie-card-time-genre-button">
               <h2 class="movie-card-time">${this.time}</h2>
               <h2 class="movie-card-genre">${this.genre}</h2>
-              <button class="movie-card-button" @click=${this._onWatchlistClick}>&#10133; Watchlist</button>
+              <button class="remove-movie-button" @click=${this._removeMovie}>&#10133; Remove from watchlist</button>
             </div>
             <p class="movie-card-description">${this.description}</p>
           </div>
         </div>
+            ` 
+          : 
+            html `
+             <div class="movie-card">
+          <img class="movie-card-image" src="${this.poster}" alt="${this.title} poster">
+          <div class="movie-card-info">
+            <div class="movie-card-title-rate">
+              <h2 class="movie-card-title">${this.title}</h2>
+              <h2 class="movie-card-rate">&#127775; ${this.rate}</h2>
+            </div>
+            <div class="movie-card-time-genre-button">
+              <h2 class="movie-card-time">${this.time}</h2>
+              <h2 class="movie-card-genre">${this.genre}</h2>
+              <button class="movie-card-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}>&#9825; Watchlist</button>
+            </div>
+            <p class="movie-card-description">${this.description}</p>
+          </div>
+        </div>
+            `
+      }
+
+      render() {
+        return html`
+        ${this.displayMovieCardConditions()}
         `
       }
        /*=========PRIVATE METHODS============*/
 
-       _onWatchlistClick() {
+          _toggleFavorite() { 
+            this.favorited = !this.favorited    
+            let movieId = this.imdbId    
+            let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
+            const index = movieFavList.findIndex(favMovie => favMovie === movieId);
+            if (index === -1) {
+                movieFavList.push(movieId);
+        
+            } else {
+                movieFavList.splice(index, 1);
+            }
+            localStorage.setItem('movieList', JSON.stringify(movieFavList));
+            alert('Movie added to watchlist');
+            }
 
-          let movie = this.movie    
-          movieStorage.push(movie)
-          localStorage.setItem('movieList', JSON.stringify(movieStorage));
-          alert('Movie added to watchlist');
-      }
+            _removeMovie() {
+              let movieId = this.imdbId    
+              let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
+              const index = movieFavList.findIndex(favMovie => favMovie === movieId);
+              if (index !== -1) {
+                movieFavList.splice(index, 1);
+              }
+              localStorage.setItem('movieList', JSON.stringify(movieFavList));
+              alert('Movie removed from watchlist');
+            }
 }
 customElements.define('movie-card', MovieCard );

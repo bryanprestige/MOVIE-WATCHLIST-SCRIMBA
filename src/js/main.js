@@ -2,7 +2,6 @@ import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
 
 export const PORT = location.port ? `:${location.port}` : ''
-const apiToken = process.env.API_TOKEN;
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -10,18 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button')
   searchButton.addEventListener('click', searchMovies)
   } else if (window.location.pathname.includes('watchlist.html')) {
-    
+    displayFavMovies()
   }
   
 })
 
 async function searchMovies() {
     const searchValue = document.getElementById('search-input').value
-    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=${apiToken}&s=${searchValue}`)
-    console.log(apiData)  
+    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=9b9e0974&s=${searchValue}`)
 
     const searchResults = apiData.Search
-    console.log(searchResults,'searchresults')
 
     if (searchResults.length === 0) {
       cleanEmptySearchContainer()
@@ -44,8 +41,7 @@ async function searchMovies() {
 } 
 
 async function getEachMovie(imdbID) {
-    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=${apiToken}&i=${imdbID}`)
-    console.log(apiData)  
+    const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=9b9e0974&i=${imdbID}`)
 
     createMovieCard(apiData)
 }
@@ -59,12 +55,8 @@ function createMovieCard(apiData) {
       apiData.Plot === 'N/A' || 
       apiData.ImdbRating === 'N/A'||
       apiData.Runtime === 'N/A') {
-        apiData.Poster = 'https://placehold.co/90x120'
-        apiData.Plot = 'No plot available'
-        apiData.ImdbRating = 'No rating available'
-        apiData.Runtime = 'No runtime available'
-    }
-    movieCard.setAttribute('movie', apiData)
+        return
+    } 
     movieCard.setAttribute('title', apiData.Title)
     movieCard.setAttribute('rate', apiData.imdbRating)
     movieCard.setAttribute('time', apiData.Runtime)
@@ -87,6 +79,46 @@ function cleanMovieCardContainer () {
 
 /*=========My Watchist=========*/ 
 
+function displayFavMovies() {
+  let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
+
+  movieFavList.forEach(favMovie => {
+    getEachFavMovie(favMovie)
+  });
+}
+
+async function getEachFavMovie(favMovie) {
+  const apiData = await getAPIData(`https://cors-anywhere.herokuapp.com/www.omdbapi.com/?apikey=9b9e0974&i=${favMovie}`)
+
+  if(apiData.length === 0) {
+    return
+  }else{
+    cleanEmptySearchContainer()
+    createMovieCardFav(apiData)
+  }
+}
+
+function createMovieCardFav(apiData) {
+  const movieCardContainer = document.querySelector('#movie-card-container-watchlist');
+  const movieCard = document.createElement('movie-card')
+
+  if(
+    apiData.Poster === 'N/A' ||
+    apiData.Plot === 'N/A' || 
+    apiData.ImdbRating === 'N/A'||
+    apiData.Runtime === 'N/A') {
+      return
+  } 
+
+  movieCard.setAttribute('title', apiData.Title)
+  movieCard.setAttribute('rate', apiData.imdbRating)
+  movieCard.setAttribute('time', apiData.Runtime)
+  movieCard.setAttribute('genre', apiData.Genre)
+  movieCard.setAttribute('description', apiData.Plot)
+  movieCard.setAttribute('poster', apiData.Poster)
+  movieCard.setAttribute('imdbId', apiData.imdbID) 
+  movieCardContainer.appendChild(movieCard)
+}
 
 
 /* =========APIDATA=========*/ 

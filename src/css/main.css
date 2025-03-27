@@ -84,9 +84,6 @@ a{
     color: #dfdddd;
 }
 
-.hidden{
-    display: none;
-}
 /*=======MOVIE-CARD-COMPONENT=========*/
 
 .movie-card{
@@ -181,4 +178,111 @@ a{
 
 .explore-link:hover{
     transform: scale(1.1);
+}
+
+.favorited{
+    color: #ffaa00;
+}
+
+.hidden{
+    display: none;
+}
+.remove-movie-button{
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    padding: unset;
+    margin-top: -3px;
+    transition: all .2s ease-in;
+}
+
+.remove-movie-button:hover{
+    transform: scale(1.1);
+}
+
+
+/*=======MEDIA QUERY=========*/
+
+@media only screen and (min-width: 1200px) {
+    nav{
+        height: 200px
+    } 
+
+    .home{
+        font-size: 50px;
+        margin-top: 65px;
+    }
+
+    .second-home{
+        font-size: 35px;
+        margin-top: 75px;
+    }
+
+    #search-container{
+        width: 400px;
+    }
+
+    #search-input{
+        width: 300px;
+        padding: 10px;
+    }
+    
+    #search-button{
+        width: 100px;
+        padding: 10px;
+    }
+
+    .empty-search{
+        margin-top: 150px;
+    }
+
+    .empty-img{
+        width: 100px;
+    }
+
+    .explore{
+        font-size: 50px;
+    }
+
+    /*=======MOVIE-CARD-COMPONENT=========*/
+
+    .movie-card{
+        width: 600px;
+    }
+
+    .movie-card-image{
+        width: 100px;
+    }
+
+    .movie-card-info{
+        font-size: 15px;
+    }
+
+    .movie-card-title-rate{
+        margin-bottom: 20px;
+    }
+
+    .movie-card-time-genre-button{
+        margin-bottom: 20px;
+    }
+
+    .movie-card-button{
+        font-size: 15px;
+    }
+
+    .movie-card-description{
+        font-size: 15px;
+    }
+
+    /*=======WATCHLIST=========*/
+
+    .explore-watchlist{
+        font-size: 25px;
+        margin-bottom: 10px;
+        margin-top: 200px;    
+    }
+
+    .explore-link{
+        font-size: 20px;
+    }
 }
