@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button')
   searchButton.addEventListener('click', searchMovies)
   } else if (window.location.pathname.includes('watchlist.html')) {
+    let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
+
+    if (movieFavList.length === 0) {
+      return
+    }
     displayFavMovies()
   }
-  
 })
 
 async function searchMovies() {
