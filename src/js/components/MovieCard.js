@@ -22,15 +22,19 @@ export class MovieCard extends LitElement {
         poster: { type: String },
         imdbId: { type: String },
         favorited: {type: Boolean, state:true},
+        checked: {type: Boolean, state:true},
       };
     
       constructor() {
-
         super();
       }
       connectedCallback() {
         super.connectedCallback();
         let movieId = this.imdbId
+        let movieWtachedList = JSON.parse(localStorage.getItem('movieWatched')) || [];
+        if (movieWtachedList.some(watchedMovie => watchedMovie === movieId)) {
+            this.checked = true
+        }
         let movieFavList = JSON.parse(localStorage.getItem('movieList')) || [];
         if (movieFavList.some(favMovie => favMovie === movieId)) {
             this.favorited = true
@@ -53,6 +57,7 @@ export class MovieCard extends LitElement {
               <h2 class="movie-card-time">${this.time}</h2>
               <h2 class="movie-card-genre">${this.genre}</h2>
               <button class="remove-movie-button" @click=${this._removeMovie}>&#10133; Remove from watchlist</button>
+              <button class="watched-movie-button ${this.checked ? 'checked' : ''}" @click=${this._toggleChecked}>&#10004; Watched</button>
             </div>
             <p class="movie-card-description">${this.description}</p>
           </div>
@@ -97,8 +102,20 @@ export class MovieCard extends LitElement {
                 movieFavList.splice(index, 1);
             }
             localStorage.setItem('movieList', JSON.stringify(movieFavList));
-            alert('Movie added to watchlist');
             }
+
+            _toggleChecked() { 
+              this.checked = !this.checked    
+              let movieId = this.imdbId    
+              let movieWatchedList = JSON.parse(localStorage.getItem('movieWatched')) || [];
+              const index = movieWatchedList.findIndex(watchedMovie => watchedMovie === movieId);
+              if (index === -1) {
+                  movieWatchedList.push(movieId);
+              } else {
+                  movieWatchedList.splice(index, 1);
+              }
+              localStorage.setItem('movieWatched', JSON.stringify(movieWatchedList));
+              }
 
             _removeMovie() {
               let movieId = this.imdbId    
@@ -108,7 +125,6 @@ export class MovieCard extends LitElement {
                 movieFavList.splice(index, 1);
               }
               localStorage.setItem('movieList', JSON.stringify(movieFavList));
-              alert('Movie removed from watchlist');
             }
 }
 customElements.define('movie-card', MovieCard );

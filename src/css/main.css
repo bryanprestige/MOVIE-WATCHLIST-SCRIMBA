@@ -184,6 +184,10 @@ a{
     color: #ffaa00;
 }
 
+.checked{
+    color: lightgreen;
+}
+
 .hidden{
     display: none;
 }
@@ -200,6 +204,14 @@ a{
     transform: scale(1.1);
 }
 
+.watched-movie-button{
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    padding: unset;
+    margin-top: -3px;
+    transition: all .2s ease-in;
+}
 
 /*=======MEDIA QUERY=========*/
 
