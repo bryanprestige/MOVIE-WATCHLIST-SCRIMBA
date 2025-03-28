@@ -25,8 +25,11 @@ app.get('/api/movies', async (req, res) => {
     const apiUrl = `http://www.omdbapi.com/?apikey=9b9e0974`;
     const queryParams = req.query;
     const url = `${apiUrl}&${Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&')}`;
+    console.log('Making request to:', url);
 
     const response = await axios.get(url);
+    console.log('Received response from OMDB API:', response.data);
+    
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching data:', error);
