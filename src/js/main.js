@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  getSpiderman()
-
   if (window.location.pathname.includes('index.html')) {
     const searchButton = document.getElementById('search-button')
   searchButton.addEventListener('click', searchMovies)
@@ -14,21 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
- function getSpiderman() {
-  const data = fetch("https://www.omdbapi.com/?apikey=9b9e0974&i=tt0100669")
-  .then(res => res.json())
-  .then(data => {
-      console.log(data)
-  })
-}
 
 function searchMovies() {
     const searchValue = document.getElementById('search-input').value
-    const apiData = fetch(`https://www.omdbapi.com/?apikey=9b9e0974&s=${searchValue}`)
-    .then(res => res.json())
-  .then(data => {
-      data.Search
-      console.log(data.Search,'search')
+    fetch(`/api/movies?s=${searchValue}`)
+/*      fetch(`https://www.omdbapi.com/?apikey=9b9e0974&s=${searchValue}`)
+ */    .then(res => res.json())
+    .then(data => {
       if (data.Search.length === 0) {
         cleanEmptySearchContainer()
         cleanMovieCardContainer()
@@ -52,11 +42,10 @@ function searchMovies() {
 } 
 
 function getEachMovie(imdbID) {
-
-    const apiData =  fetch(`https://www.omdbapi.com/?apikey=9b9e0974&i=${imdbID}`)
+    fetch(`/api/movies?i=${imdbID}`)
+    /* fetch(`https://www.omdbapi.com/?apikey=9b9e0974&i=${imdbID}`) */
     .then(res => res.json())
     .then(data => {
-      console.log(data,'getEachMovie')
       createMovieCard(data)
     })
 }
@@ -68,7 +57,7 @@ function createMovieCard(data) {
     if(
       data.Poster === 'N/A' ||
       data.Plot === 'N/A' || 
-      data.ImdbRating === 'N/A'||
+      data.imdbRating === 'N/A'||
       data.Runtime === 'N/A') {
         return
     } 
@@ -103,5 +92,4 @@ function displayFavMovies() {
 
 }
 
-/* =========APIDATA=========*/ 
 

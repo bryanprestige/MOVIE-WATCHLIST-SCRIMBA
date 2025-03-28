@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bryanprestige/MOVIE-WATCHLIST-SCRIMBA#readme",
   "dependencies": {
+    "axios": "^1.8.4",
     "body-parser": "^1.20.3",
     "express": "^4.21.2"
   }

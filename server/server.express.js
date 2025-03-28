@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-
+import axios from 'axios';
 
 const app = express();
 const port = process.env.port
@@ -20,26 +20,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api', (req, res) => {
-  const apiUrl = `http://www.omdbapi.com/?apikey=${apiToken}`;
-  const queryParams = req.query;
-  const url = `${apiUrl}&${Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&')}`;
+app.get('/api/movies', async (req, res) => {
+  try {
+    const apiUrl = `http://www.omdbapi.com/?apikey=9b9e0974`;
+    const queryParams = req.query;
+    const url = `${apiUrl}&${Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&')}`;
 
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => res.json(data))
-    .catch(error => {
-      console.error('Error fetching data:', error);
-      res.status(500).json({ error: 'Failed to fetch data' });npm
-    });
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
 });
 
-
 app.listen(port, ip, () => {
-  console.log(`Example app listening on ${ip}:${port}`)
+  console.log(`Example app listening on ${port}:${ip}`);
 })
